@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали бронирования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Коворкинг</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/spaces">Пространства</a>
+                <a class="nav-link" href="/bookings">Мои бронирования</a>
+                <a class="nav-link" href="/profile">Профиль</a>
+                <a class="nav-link" href="/logout">Выйти</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Детали бронирования</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Информация о пространстве</h5>
+                                <ul class="list-unstyled">
+                                    <li><strong>Название:</strong> <span th:text="${booking.space.name}"></span></li>
+                                    <li><strong>Местоположение:</strong> <span th:text="${booking.space.location}"></span></li>
+                                    <li><strong>Цена:</strong> <span th:text="${booking.space.price} + ' ₽/час'"></span></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Информация о бронировании</h5>
+                                <ul class="list-unstyled">
+                                    <li><strong>Дата:</strong> <span th:text="${#temporals.format(booking.startTime, 'dd.MM.yyyy')}"></span></li>
+                                    <li><strong>Время:</strong> <span th:text="${#temporals.format(booking.startTime, 'HH:mm')} + ' - ' + ${#temporals.format(booking.endTime, 'HH:mm')}"></span></li>
+                                    <li><strong>Статус:</strong> 
+                                        <span th:if="${booking.status == 'confirmed'}" class="badge bg-success">Подтверждено</span>
+                                        <span th:if="${booking.status == 'pending'}" class="badge bg-warning">Ожидает подтверждения</span>
+                                        <span th:if="${booking.status == 'cancelled'}" class="badge bg-danger">Отменено</span>
+                                        <span th:if="${booking.status == 'completed'}" class="badge bg-secondary">Завершено</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5>Описание пространства</h5>
+                            <p th:text="${booking.space.description}"></p>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/bookings" class="btn btn-secondary">← Назад к бронированиям</a>
+                            <div th:if="${booking.status == 'pending' || booking.status == 'confirmed'}">
+                                <form th:action="@{'/bookings/' + ${booking.id} + '/cancel'}" 
+                                      method="post" class="d-inline" 
+                                      th:onclick="'return confirm(\'Вы уверены, что хотите отменить это бронирование?\')'">
+                                    <button type="submit" class="btn btn-danger">Отменить бронирование</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

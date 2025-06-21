@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка - Коворкинг Бронирование</title>
+
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4">
+                            <h1 class="display-1 text-danger" th:text="${statusCode ?: '500'}">500</h1>
+                        </div>
+                        
+                        <h2 class="mb-4" th:text="${errorMessage ?: 'Произошла ошибка'}">Произошла ошибка</h2>
+                        
+                        <p class="lead mb-4" th:text="${errorDetails ?: 'Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную.'}">
+                            Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную.
+                        </p>
+                        
+                        <div class="d-grid gap-2 d-md-block">
+                            <a href="/" class="btn btn-primary btn-lg">На главную</a>
+                            <button onclick="history.back()" class="btn btn-outline-secondary btn-lg">Назад</button>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-muted">
+                            <p>Если проблема повторяется, обратитесь в службу поддержки</p>
+                            <p>Email: support@coworking-booking.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

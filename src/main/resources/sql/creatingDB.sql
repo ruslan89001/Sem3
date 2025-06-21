@@ -54,9 +54,9 @@ CREATE TABLE IF NOT EXISTS working_hours (
 INSERT INTO users (username, password, email, role, token)
 VALUES (
            'admin',
-           '6d4525c2a21f9be1cca9e41f3aa402e0765ee5fcc3e7fea34a169b1730ae386e',
-           'admin@coworking.com',
            'admin',
+           'admin@coworking.com',
+           'ADMIN',
            gen_random_uuid()
        );
 -- Вставка тестовых коворкинг-пространств

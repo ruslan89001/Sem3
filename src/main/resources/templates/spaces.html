@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пространства - Коворкинг Бронирование</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Коворкинг Бронирование</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/spaces">Пространства</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" href="/admin">Админ панель</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">Войти</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/register">Регистрация</a>
+                    </li>
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <span sec:authentication="name">Пользователь</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile">Профиль</a></li>
+                            <li><a class="dropdown-item" href="/bookings">Мои бронирования</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Коворкинг-пространства</h1>
+        
+        <!-- Поиск и сортировка -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <form th:action="@{/spaces}" method="get" class="d-flex">
+                    <input type="text" name="name" class="form-control me-2" 
+                           placeholder="Поиск по названию" th:value="${searchName}">
+                    <input type="hidden" name="sort" th:value="${currentSort}">
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form th:action="@{/spaces}" method="get" class="d-flex">
+                    <input type="text" name="location" class="form-control me-2" 
+                           placeholder="Поиск по местоположению" th:value="${searchLocation}">
+                    <input type="hidden" name="sort" th:value="${currentSort}">
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                        <span th:text="${currentSort == 'default' ? 'Сортировка' : (currentSort == 'popular' ? 'По популярности' : 'По рейтингу')}">Сортировка</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/spaces(sort='default', name=${searchName}, location=${searchLocation})}">По умолчанию</a></li>
+                        <li><a class="dropdown-item" th:href="@{/spaces(sort='popular', name=${searchName}, location=${searchLocation})}">По популярности</a></li>
+                        <li><a class="dropdown-item" th:href="@{/spaces(sort='rating', name=${searchName}, location=${searchLocation})}">По рейтингу</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Результаты поиска -->
+        <div th:if="${searchName != null or searchLocation != null}" class="mb-3">
+            <a href="/spaces" class="btn btn-outline-secondary">Показать все</a>
+        </div>
+        
+        <!-- Список пространств -->
+        <div class="row">
+            <div th:each="space : ${spaces}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${space.name}">Название пространства</h5>
+                        
+                        <div class="mb-2">
+                            <span class="badge bg-success" th:if="${space.availability}">Доступно</span>
+                            <span class="badge bg-danger" th:unless="${space.availability}">Недоступно</span>
+                        </div>
+                        
+                        <div th:if="${spaceRatings.get(space.id) != null}" class="mb-2">
+                            <strong>Рейтинг:</strong> 
+                            <span th:text="${#numbers.formatDecimal(spaceRatings.get(space.id), 1, 1)} + ' ⭐'"></span>
+                            <small class="text-muted" th:text="'(' + ${spaceReviewCounts.get(space.id)} + ' ' + ${spaceReviewCounts.get(space.id) == 1 ? 'отзыв' : (spaceReviewCounts.get(space.id) >= 2 && spaceReviewCounts.get(space.id) <= 4 ? 'отзыва' : 'отзывов')} + ')'"></small>
+                        </div>
+                        
+                        <p class="card-text" th:text="${#strings.abbreviate(space.description, 100)}">Описание</p>
+                        
+                        <div class="mb-2">
+                            <strong>Местоположение:</strong>
+                            <p class="text-muted" th:text="${space.location}">Адрес</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Цена:</strong>
+                            <span class="text-primary" th:text="${'₽' + space.price + ' / день'}">Цена</span>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <a th:href="@{'/spaces/' + ${space.id}}" class="btn btn-primary">Подробнее</a>
+                            <a th:href="@{'/bookings/create/' + ${space.id}}" 
+                               class="btn btn-outline-primary" th:if="${space.availability}">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Сообщение если нет результатов -->
+        <div th:if="${#lists.isEmpty(spaces)}" class="text-center py-5">
+            <h3 class="text-muted">Пространства не найдены</h3>
+            <p class="text-muted">Попробуйте изменить параметры поиска</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

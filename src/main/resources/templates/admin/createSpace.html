@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание пространства - Админ-панель</title>
+
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/admin">Админ-панель</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Админ: <span th:text="${user.username}"></span></span>
+                <a class="nav-link" href="/profile">Профиль</a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Выход</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Создание нового пространства</h1>
+                    <a href="/admin/spaces" class="btn btn-secondary">← Назад к списку</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Заполните информацию о пространстве</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/spaces/create}" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Название пространства *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Описание *</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Адрес *</label>
+                                <input type="text" class="form-control" id="location" name="location" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Цена за час (₽) *</label>
+                                <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="availability" class="form-label">Статус доступности *</label>
+                                <select class="form-select" id="availability" name="availability" required>
+                                    <option value="true">Доступно</option>
+                                    <option value="false">Недоступно</option>
+                                </select>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/admin/spaces" class="btn btn-secondary me-md-2">Отмена</a>
+                                <button type="submit" class="btn btn-success">Создать пространство</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

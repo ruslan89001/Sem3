@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест входа - Коворкинг Бронирование</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h3 class="text-center">Тест входа в систему</h3>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Error Message -->
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <strong>Ошибка:</strong> <span th:text="${error}"></span>
+                        </div>
+                        
+                        <!-- Admin User Info -->
+                        <div th:if="${adminExists}" class="alert alert-success" role="alert">
+                            <h4>✅ Пользователь admin найден!</h4>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th>Поле</th>
+                                    <th>Значение</th>
+                                </tr>
+                                <tr>
+                                    <td>Username</td>
+                                    <td th:text="${adminUsername}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td th:text="${adminEmail}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Role</td>
+                                    <td th:text="${adminRole}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Password</td>
+                                    <td th:text="${adminPassword}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div th:unless="${adminExists}" class="alert alert-warning" role="alert">
+                            <h4>⚠️ Пользователь admin не найден!</h4>
+                        </div>
+                        
+                        <!-- UserDetails Test -->
+                        <div th:if="${userDetailsLoaded}" class="alert alert-info" role="alert">
+                            <h4>✅ UserDetails загружен успешно!</h4>
+                            <p><strong>Authorities:</strong> <span th:text="${userDetailsAuthorities}"></span></p>
+                        </div>
+                        
+                        <div th:if="${userDetailsLoaded == false}" class="alert alert-danger" role="alert">
+                            <h4>❌ Ошибка загрузки UserDetails</h4>
+                            <p><strong>Ошибка:</strong> <span th:text="${userDetailsError}"></span></p>
+                        </div>
+                        
+                        <!-- Navigation -->
+                        <div class="text-center mt-4">
+                            <a href="/test" class="btn btn-primary">Тест</a>
+                            <a href="/test-db" class="btn btn-success">Тест БД</a>
+                            <a href="/login" class="btn btn-warning">Вход</a>
+                            <a href="/" class="btn btn-secondary">Главная</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

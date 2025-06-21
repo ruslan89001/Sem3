@@ -1,60 +1,84 @@
 package ru.kpfu.itis.coworkingbooking.models;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalTime;
+
+@Entity
+@Table(name = "working_hours")
 public class WorkingHours {
-
-    private int id;
-    private int spaceId;
-    private String dayOfWeek;
-    private Timestamp startTime;
-    private Timestamp endTime;
-
-    public WorkingHours(int id, int spaceId, String dayOfWeek, Timestamp startTime, Timestamp endTime) {
-        this.id = id;
-        this.spaceId = spaceId;
-        this.dayOfWeek = dayOfWeek;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull(message = "Пространство обязательно")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "space_id", nullable = false)
+    @JsonBackReference
+    private Space space;
+    
+    @NotNull(message = "День недели обязателен")
+    @Column(name = "weekday", nullable = false)
+    private String weekday;
+    
+    @NotNull(message = "Время начала обязательно")
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
+    
+    @NotNull(message = "Время окончания обязательно")
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
+    
+    public WorkingHours() {}
+    
+    public WorkingHours(Space space, String weekday, LocalTime startTime, LocalTime endTime) {
+        this.space = space;
+        this.weekday = weekday;
         this.startTime = startTime;
         this.endTime = endTime;
     }
-
-    public int getId() {
+    
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
-
-    public void setId(int id) {
+    
+    public void setId(Long id) {
         this.id = id;
     }
-
-    public int getSpaceId() {
-        return spaceId;
+    
+    public Space getSpace() {
+        return space;
     }
-
-    public void setSpaceId(int spaceId) {
-        this.spaceId = spaceId;
+    
+    public void setSpace(Space space) {
+        this.space = space;
     }
-
-    public String getDayOfWeek() {
-        return dayOfWeek;
+    
+    public String getWeekday() {
+        return weekday;
     }
-
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    
+    public void setWeekday(String weekday) {
+        this.weekday = weekday;
     }
-
-    public Timestamp getStartTime() {
+    
+    public LocalTime getStartTime() {
         return startTime;
     }
-
-    public void setStartTime(Timestamp startTime) {
+    
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
-
-    public Timestamp getEndTime() {
+    
+    public LocalTime getEndTime() {
         return endTime;
     }
-
-    public void setEndTime(Timestamp endTime) {
+    
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 }

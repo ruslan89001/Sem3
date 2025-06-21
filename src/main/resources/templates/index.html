@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная - Коворкинг Бронирование</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Найдите идеальное рабочее пространство</h1>
+                    <p class="lead">Бронируйте коворкинг-пространства в удобном месте и в удобное время</p>
+                    <a href="/spaces" class="btn btn-light btn-lg">Найти пространство</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bg-light text-dark p-4 rounded">
+                        <h3>Добро пожаловать!</h3>
+                        <p>Выберите удобное рабочее пространство для ваших задач</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Spaces -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Популярные пространства</h2>
+            <div class="row">
+                <div th:each="space : ${popularSpaces}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${space.name}">Популярное пространство</h5>
+                            <p class="card-text" th:text="${space.description}">Описание</p>
+                            <p class="card-text">
+                                <strong>Цена:</strong> <span th:text="${space.price} + ' ₽/день'"></span>
+                                <br>
+                                <small class="text-muted">
+                                    <span th:text="${#numbers.formatDecimal(spacePricesInCurrencies.get(space.id).get('USD'), 1, 2)} + ' $/день'"></span> | 
+                                    <span th:text="${#numbers.formatDecimal(spacePricesInCurrencies.get(space.id).get('EUR'), 1, 2)} + ' €/день'"></span>
+                                </small>
+                            </p>
+                            <div th:if="${spaceRatings.get(space.id) != null}" class="mb-2">
+                                <strong>Рейтинг:</strong> 
+                                <span th:text="${#numbers.formatDecimal(spaceRatings.get(space.id), 1, 1)} + ' ⭐'"></span>
+                                <small class="text-muted" th:text="'(' + ${spaceReviewCounts.get(space.id)} + ' ' + ${spaceReviewCounts.get(space.id) == 1 ? 'отзыв' : (spaceReviewCounts.get(space.id) >= 2 && spaceReviewCounts.get(space.id) <= 4 ? 'отзыва' : 'отзывов')} + ')'"></small>
+                            </div>
+                            <a th:href="@{'/spaces/' + ${space.id}}" class="btn btn-outline-primary">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highly Rated Spaces -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Высоко оцененные пространства</h2>
+            <div class="row">
+                <div th:each="space : ${highlyRatedSpaces}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${space.name}">Высоко оцененное пространство</h5>
+                            <p class="card-text" th:text="${space.description}">Описание</p>
+                            <div th:if="${spaceRatings.get(space.id) != null}" class="mb-2">
+                                <strong>Рейтинг:</strong> 
+                                <span th:text="${#numbers.formatDecimal(spaceRatings.get(space.id), 1, 1)} + ' ⭐'"></span>
+                                <small class="text-muted" th:text="'(' + ${spaceReviewCounts.get(space.id)} + ' ' + ${spaceReviewCounts.get(space.id) == 1 ? 'отзыв' : (spaceReviewCounts.get(space.id) >= 2 && spaceReviewCounts.get(space.id) <= 4 ? 'отзыва' : 'отзывов')} + ')'"></small>
+                            </div>
+                            <p class="card-text">
+                                <strong>Цена:</strong> <span th:text="${space.price} + ' ₽/день'"></span>
+                                <br>
+                                <small class="text-muted">
+                                    <span th:text="${#numbers.formatDecimal(spacePricesInCurrencies.get(space.id).get('USD'), 1, 2)} + ' $/день'"></span> | 
+                                    <span th:text="${#numbers.formatDecimal(spacePricesInCurrencies.get(space.id).get('EUR'), 1, 2)} + ' €/день'"></span>
+                                </small>
+                            </p>
+                            <a th:href="@{'/spaces/' + ${space.id}}" class="btn btn-outline-primary">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Почему выбирают нас</h2>
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-clock fa-3x text-primary"></i>
+                    </div>
+                    <h4>Быстрое бронирование</h4>
+                    <p>Забронируйте пространство за несколько кликов</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Удобное расположение</h4>
+                    <p>Пространства в центре города и районах</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Безопасность</h4>
+                    <p>Охраняемые помещения с контролем доступа</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html> 

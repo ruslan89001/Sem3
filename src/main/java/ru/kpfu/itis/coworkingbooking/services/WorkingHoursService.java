@@ -1,32 +1,40 @@
 package ru.kpfu.itis.coworkingbooking.services;
 
-import ru.kpfu.itis.coworkingbooking.dao.WorkingHoursDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.kpfu.itis.coworkingbooking.models.WorkingHours;
+import ru.kpfu.itis.coworkingbooking.repositories.WorkingHoursRepository;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class WorkingHoursService {
 
-    private WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO();
+    @Autowired
+    private WorkingHoursRepository workingHoursRepository;
 
-    public List<WorkingHours> getAllWorkingHours() throws SQLException {
-        return workingHoursDAO.getAllWorkingHours();
+    public List<WorkingHours> getAllWorkingHours() {
+        return workingHoursRepository.findAll();
     }
 
-    public WorkingHours getWorkingHoursById(int id) throws SQLException {
-        return workingHoursDAO.getWorkingHoursById(id);
+    public Optional<WorkingHours> getWorkingHoursById(Long id) {
+        return workingHoursRepository.findById(id);
     }
 
-    public void createWorkingHours(WorkingHours workingHours) throws SQLException {
-        workingHoursDAO.createWorkingHours(workingHours);
+    public WorkingHours createWorkingHours(WorkingHours workingHours) {
+        return workingHoursRepository.save(workingHours);
     }
 
-    public void updateWorkingHours(WorkingHours workingHours) throws SQLException {
-        workingHoursDAO.updateWorkingHours(workingHours);
+    public WorkingHours updateWorkingHours(WorkingHours workingHours) {
+        return workingHoursRepository.save(workingHours);
     }
 
-    public void deleteWorkingHours(int id) throws SQLException {
-        workingHoursDAO.deleteWorkingHours(id);
+    public void deleteWorkingHours(Long id) {
+        workingHoursRepository.deleteById(id);
+    }
+
+    public List<WorkingHours> findBySpaceId(Long spaceId) {
+        return workingHoursRepository.findBySpaceId(spaceId);
     }
 }

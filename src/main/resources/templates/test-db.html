@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест БД - Коворкинг Бронирование</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Тест базы данных</h3>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${adminExists}">
+                            <h4 class="text-success">✅ Пользователь admin найден!</h4>
+                            <table class="table">
+                                <tr>
+                                    <th>Поле</th>
+                                    <th>Значение</th>
+                                </tr>
+                                <tr>
+                                    <td>Username</td>
+                                    <td th:text="${adminUsername}">admin</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td th:text="${adminEmail}">admin@example.com</td>
+                                </tr>
+                                <tr>
+                                    <td>Role</td>
+                                    <td th:text="${adminRole}">ADMIN</td>
+                                </tr>
+                                <tr>
+                                    <td>Password</td>
+                                    <td th:text="${adminPassword}">admin</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div th:unless="${adminExists}">
+                            <h4 class="text-danger">❌ Пользователь admin не найден!</h4>
+                            <p>Нужно создать пользователя admin в базе данных.</p>
+                        </div>
+                        
+                        <div th:if="${error}" class="alert alert-danger">
+                            <strong>Ошибка:</strong> <span th:text="${error}"></span>
+                        </div>
+                        
+                        <a href="/" class="btn btn-primary">На главную</a>
+                        <a href="/test" class="btn btn-secondary">Простой тест</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

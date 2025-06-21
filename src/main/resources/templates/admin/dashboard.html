@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Коворкинг Бронирование</title>
+
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Коворкинг Бронирование</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Админ: <span th:text="${user.username}"></span></span>
+                <a class="nav-link" href="/profile">Профиль</a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Выход</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Админ-панель</h1>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <h5 class="card-title">Пользователи</h5>
+                                <p class="card-text display-6" th:text="${totalUsers}">0</p>
+                                <a href="/admin/users" class="btn btn-light">Управление</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <h5 class="card-title">Пространства</h5>
+                                <p class="card-text display-6" th:text="${totalSpaces}">0</p>
+                                <a href="/admin/spaces" class="btn btn-light">Управление</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-info">
+                            <div class="card-body">
+                                <h5 class="card-title">Бронирования</h5>
+                                <p class="card-text display-6" th:text="${totalBookings}">0</p>
+                                <a href="/admin/bookings" class="btn btn-light">Управление</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Быстрые действия</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 mb-2">
+                                        <a href="/admin/users" class="btn btn-outline-primary w-100">Управление пользователями</a>
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <a href="/admin/spaces" class="btn btn-outline-success w-100">Управление пространствами</a>
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <a href="/admin/bookings" class="btn btn-outline-info w-100">Управление бронированиями</a>
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <a href="/profile" class="btn btn-outline-secondary w-100">Мой профиль</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

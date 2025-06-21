@@ -1,69 +1,101 @@
 package ru.kpfu.itis.coworkingbooking.models;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "reviews")
 public class Review {
-    private int id;
-    private int userId;
-    private int spaceId;
-    private int rating;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull(message = "Пользователь обязателен")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
+    
+    @NotNull(message = "Пространство обязательно")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "space_id", nullable = false)
+    @JsonBackReference
+    private Space space;
+    
+    @NotNull(message = "Рейтинг обязателен")
+    @Min(value = 1, message = "Рейтинг должен быть от 1 до 5")
+    @Max(value = 5, message = "Рейтинг должен быть от 1 до 5")
+    @Column(nullable = false)
+    private Integer rating;
+    
+    @Column(columnDefinition = "TEXT")
     private String comment;
-    private Timestamp createdAt;
-
-    public Review(int id, int userId, int spaceId, int rating, String comment, Timestamp createdAt) {
-        this.id = id;
-        this.userId = userId;
-        this.spaceId = spaceId;
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    public Review() {}
+    
+    public Review(User user, Space space, Integer rating, String comment) {
+        this.user = user;
+        this.space = space;
         this.rating = rating;
         this.comment = comment;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
-
-    public int getId() {
+    
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
-
-    public void setId(int id) {
+    
+    public void setId(Long id) {
         this.id = id;
     }
-
-    public int getUserId() {
-        return userId;
+    
+    public User getUser() {
+        return user;
     }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    
+    public void setUser(User user) {
+        this.user = user;
     }
-
-    public int getSpaceId() {
-        return spaceId;
+    
+    public Space getSpace() {
+        return space;
     }
-
-    public void setSpaceId(int spaceId) {
-        this.spaceId = spaceId;
+    
+    public void setSpace(Space space) {
+        this.space = space;
     }
-
-    public int getRating() {
+    
+    public Integer getRating() {
         return rating;
     }
-
-    public void setRating(int rating) {
+    
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
-
+    
     public String getComment() {
         return comment;
     }
-
+    
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-    public Timestamp getCreatedAt() {
+    
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public void setCreatedAt(Timestamp createdAt) {
+    
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

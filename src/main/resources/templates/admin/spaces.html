@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пространствами - Админ-панель</title>
+
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/admin">Админ-панель</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Админ: <span th:text="${user.username}"></span></span>
+                <a class="nav-link" href="/profile">Профиль</a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Выход</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Управление пространствами</h1>
+                    <div>
+                        <a href="/admin/spaces/create" class="btn btn-success me-2">+ Создать пространство</a>
+                        <a href="/admin" class="btn btn-secondary">← Назад к панели</a>
+                    </div>
+                </div>
+
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Список пространств</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Название</th>
+                                        <th>Описание</th>
+                                        <th>Адрес</th>
+                                        <th>Цена</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="space : ${spaces}">
+                                        <td th:text="${space.id}">1</td>
+                                        <td th:text="${space.name}">Название</td>
+                                        <td th:text="${space.description}">Описание</td>
+                                        <td th:text="${space.location}">Адрес</td>
+                                        <td th:text="${space.price}">1000</td>
+                                        <td>
+                                            <span th:if="${space.availability}" class="badge bg-success">Доступно</span>
+                                            <span th:if="${!space.availability}" class="badge bg-danger">Недоступно</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{'/admin/spaces/edit/' + ${space.id}}" 
+                                                   class="btn btn-sm btn-outline-primary">Редактировать</a>
+                                                <form th:action="@{/admin/spaces/toggle/{id}(id=${space.id})}" 
+                                                      method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning">
+                                                        <span th:text="${space.availability ? 'Скрыть' : 'Показать'}"></span>
+                                                    </button>
+                                                </form>
+                                                <form th:action="@{/admin/spaces/delete/{id}(id=${space.id})}" 
+                                                      method="post" class="d-inline" 
+                                                      th:onclick="'return confirm(\'Вы уверены, что хотите удалить это пространство?\')'">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

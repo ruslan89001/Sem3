@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест REST API - Коворкинг Бронирование</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Коворкинг Бронирование</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Главная</a>
+                <a class="nav-link" href="/spaces">Пространства</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Тест REST API</h1>
+        <p class="lead">Демонстрация работы REST API для пространств</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Получить все пространства</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary" onclick="getAllSpaces()">GET /api/spaces</button>
+                        <div id="allSpacesResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Тест API</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-info" onclick="testApi()">GET /api/test</button>
+                        <div id="testResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Получить доступные пространства</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-success" onclick="getAvailableSpaces()">GET /api/spaces/available</button>
+                        <div id="availableSpacesResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Поиск пространств</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="searchLocation" class="form-control mb-2" placeholder="Местоположение">
+                        <button class="btn btn-info" onclick="searchSpaces()">GET /api/spaces/search</button>
+                        <div id="searchResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Получить пространство по ID</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="number" id="spaceId" class="form-control mb-2" placeholder="ID пространства" value="1">
+                        <button class="btn btn-warning" onclick="getSpaceById()">GET /api/spaces/{id}</button>
+                        <div id="spaceByIdResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Создать пространство (POST)</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="createName" class="form-control mb-2" placeholder="Название" value="Тестовое пространство">
+                        <textarea id="createDescription" class="form-control mb-2" placeholder="Описание" rows="2">Описание тестового пространства</textarea>
+                        <input type="number" id="createPrice" class="form-control mb-2" placeholder="Цена" value="1000">
+                        <input type="text" id="createLocation" class="form-control mb-2" placeholder="Адрес" value="Тестовый адрес">
+                        <button class="btn btn-success" onclick="createSpace()">POST /api/spaces</button>
+                        <div id="createResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Обновить пространство (PUT)</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="number" id="updateId" class="form-control mb-2" placeholder="ID" value="1">
+                        <input type="text" id="updateName" class="form-control mb-2" placeholder="Название" value="Обновленное пространство">
+                        <textarea id="updateDescription" class="form-control mb-2" placeholder="Описание" rows="2">Обновленное описание</textarea>
+                        <input type="number" id="updatePrice" class="form-control mb-2" placeholder="Цена" value="1200">
+                        <input type="text" id="updateLocation" class="form-control mb-2" placeholder="Адрес" value="Обновленный адрес">
+                        <button class="btn btn-primary" onclick="updateSpace()">PUT /api/spaces/{id}</button>
+                        <div id="updateResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Удалить пространство (DELETE)</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="number" id="deleteId" class="form-control mb-2" placeholder="ID пространства" value="1">
+                        <button class="btn btn-danger" onclick="deleteSpace()">DELETE /api/spaces/{id}</button>
+                        <div id="deleteResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function getAllSpaces() {
+            fetch('/api/spaces')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('allSpacesResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('allSpacesResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+        }
+        
+        function testApi() {
+            fetch('/api/test')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('testResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('testResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+        }
+        
+        function getAvailableSpaces() {
+            fetch('/api/spaces/available')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('availableSpacesResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('availableSpacesResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+        }
+        
+        function searchSpaces() {
+            const location = document.getElementById('searchLocation').value;
+            const url = location ? `/api/spaces/search?location=${encodeURIComponent(location)}` : '/api/spaces/search';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('searchResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('searchResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+        }
+        
+        function getSpaceById() {
+            const id = document.getElementById('spaceId').value;
+            fetch(`/api/spaces/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('spaceByIdResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('spaceByIdResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+        }
+        
+        function createSpace() {
+            const name = document.getElementById('createName').value;
+            const description = document.getElementById('createDescription').value;
+            const price = document.getElementById('createPrice').value;
+            const location = document.getElementById('createLocation').value;
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('price', price);
+            formData.append('location', location);
+            
+            fetch('/api/spaces', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('createResult').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('createResult').innerHTML = 
+                    '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+            });
+        }
+        
+        function updateSpace() {
+            const id = document.getElementById('updateId').value;
+            const name = document.getElementById('updateName').value;
+            const description = document.getElementById('updateDescription').value;
+            const price = document.getElementById('updatePrice').value;
+            const location = document.getElementById('updateLocation').value;
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('price', price);
+            formData.append('location', location);
+            
+            fetch(`/api/spaces/${id}`, {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('updateResult').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('updateResult').innerHTML = 
+                    '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+            });
+        }
+        
+        function deleteSpace() {
+            const id = document.getElementById('deleteId').value;
+            
+            if (confirm('Вы уверены, что хотите удалить пространство с ID ' + id + '?')) {
+                fetch(`/api/spaces/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('deleteResult').innerHTML = 
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('deleteResult').innerHTML = 
+                        '<div class="alert alert-danger">Ошибка: ' + error.message + '</div>';
+                });
+            }
+        }
+    </script>
+</body>
+</html> 
